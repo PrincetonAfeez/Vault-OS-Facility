@@ -99,3 +99,12 @@ class Facility(
         configure_demo_facility(facility)
         return facility
 
+    @staticmethod
+    def _build_event_stack() -> tuple[EventBus, AlertManager, LogHandler]:
+        alert_manager = AlertManager()
+        event_bus = EventBus(dedup_threshold=10)
+        event_log = LogHandler()
+        event_bus.subscribe(event_log, name="facility-log")
+        event_bus.subscribe(AlertHandler(alert_manager), name="facility-alerting")
+        return event_bus, alert_manager, event_log
+
