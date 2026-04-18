@@ -1,0 +1,9 @@
+# Editable install of vaultos-facility from this directory.
+# Runtime expects Vault OS subsystem folders (Access, Devices, Events, Invites,
+# Personnel, Vault) as siblings of Facility/ or set VAULTOS_ROOT — see README.md.
+-e .
+
+# Development and tests (optional)
+pytest>=9.0
+hypothesis>=6.140
+pytest-cov>=5.0
