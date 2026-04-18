@@ -78,3 +78,25 @@ from vault import (  # type: ignore[import-not-found]
     Vault,
     VaultSummary,
 )
+from vault.domain import Item, seed_demo_vault
+
+ACCESS_TO_VAULT_LEVEL: dict[AccessAccessLevel, VaultAccessLevel] = {
+    AccessAccessLevel.VISITOR: VaultAccessLevel.VISITOR,
+    AccessAccessLevel.STAFF: VaultAccessLevel.STAFF,
+    AccessAccessLevel.MANAGER: VaultAccessLevel.MANAGER,
+    AccessAccessLevel.ADMIN: VaultAccessLevel.DIRECTOR,
+}
+
+PERSON_TYPES = {
+    "Employee": Employee,
+    "Visitor": Visitor,
+    "Contractor": Contractor,
+}
+
+DEVICE_TYPES = {
+    "Camera": Camera,
+    "Lock": Lock,
+    "AlarmSystem": AlarmSystem,
+    "Thermostat": Thermostat,
+}
+
