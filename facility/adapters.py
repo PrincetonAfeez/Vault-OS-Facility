@@ -135,3 +135,6 @@ def schedule_record(schedule: GateSchedule | None) -> dict[str, str] | None:
         "start_time": schedule.start_time.isoformat(timespec="minutes"),
         "end_time": schedule.end_time.isoformat(timespec="minutes"),
     }
+
+def money_string(value: Decimal) -> str:
+    return f"{value:.2f}"
