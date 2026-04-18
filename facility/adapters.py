@@ -56,3 +56,12 @@ from invites import (  # type: ignore[import-not-found]
     UsageLogEntry,
     ValidationResult,
 )
+from panel import DEMO_ALARM_RESET_CODE, DEMO_LOCK_KEYCODE, DevicePanel, seed_demo_panel  # type: ignore[import-not-found]
+from personnel import (  # type: ignore[import-not-found]
+    CheckInError,
+    Contractor,
+    Employee,
+    Person,
+    PersonnelRegistry,
+    Visitor,
+)
