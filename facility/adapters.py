@@ -100,3 +100,9 @@ DEVICE_TYPES = {
     "Thermostat": Thermostat,
 }
 
+def to_utc(moment: datetime | None = None) -> datetime:
+    current = moment or datetime.now(UTC)
+    if current.tzinfo is None:
+        return current.astimezone(UTC)
+    return current.astimezone(UTC)
+
