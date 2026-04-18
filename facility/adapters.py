@@ -22,3 +22,16 @@ from access_control import (
     build_demo_controller,
     naive_facility_moment,
 )
+from devices import (  # type: ignore[import-not-found]
+    ActivityEntry,
+    AlarmSystem,
+    Camera,
+    Device,
+    DeviceAuthorizationError,
+    DeviceLockoutError,
+    DevicePoweredOffError,
+    DeviceStateError,
+    Lock,
+    RecordingSession,
+    Thermostat,
+)
