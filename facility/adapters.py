@@ -110,3 +110,9 @@ def facility_date(moment: datetime | None = None) -> date:
     current = moment or datetime.now()
     return naive_facility_moment(current).date()
 
+def parse_access_level(value: AccessAccessLevel | str | int) -> AccessAccessLevel:
+    if isinstance(value, AccessAccessLevel):
+        return value
+    if isinstance(value, int):
+        return AccessAccessLevel(value)
+    return AccessAccessLevel.from_string(str(value))
