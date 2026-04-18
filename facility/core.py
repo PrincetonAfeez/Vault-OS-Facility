@@ -113,3 +113,8 @@ class Facility(
 
         return write_facility_json(self, path)
 
+    @classmethod
+    def load(cls, path: str | Path) -> Facility:
+        from .persistence import read_facility_json
+
+        return read_facility_json(path, facility_cls=cls)
