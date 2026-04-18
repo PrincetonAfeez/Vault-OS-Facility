@@ -35,3 +35,14 @@ from devices import (  # type: ignore[import-not-found]
     RecordingSession,
     Thermostat,
 )
+from events import (  # type: ignore[import-not-found]
+    Alert,
+    AlertHandler,
+    AlertManager,
+    AlertState,
+    Event,
+    EventBus,
+    LogHandler,
+    Severity,
+    format_event,
+)
