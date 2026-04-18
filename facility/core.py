@@ -124,3 +124,8 @@ class Facility(
 
         return facility_to_record(self)
 
+    @classmethod
+    def from_record(cls, record: dict[str, Any]) -> Facility:
+        from .persistence import facility_from_record
+
+        return facility_from_record(record, facility_cls=cls)
