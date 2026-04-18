@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vaultos-facility"
+version = "0.1.0"
+description = "Day 21 integration layer for the Vault OS subsystem apps."
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["vault-os", "integration", "facility"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0",
+    "hypothesis>=6.140",
+    "pytest-cov>=5.0",
+]
+
+[project.scripts]
+vaultos-facility = "facility.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["facility*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
