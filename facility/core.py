@@ -108,3 +108,8 @@ class Facility(
         event_bus.subscribe(AlertHandler(alert_manager), name="facility-alerting")
         return event_bus, alert_manager, event_log
 
+    def save(self, path: str | Path) -> Path:
+        from .persistence import write_facility_json
+
+        return write_facility_json(self, path)
+
