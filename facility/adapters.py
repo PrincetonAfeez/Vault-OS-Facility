@@ -65,3 +65,16 @@ from personnel import (  # type: ignore[import-not-found]
     PersonnelRegistry,
     Visitor,
 )
+from vault import (  # type: ignore[import-not-found]
+    AccessDeniedError,
+    AccessLevel as VaultAccessLevel,
+    AuditAction,
+    CustodyRecord,
+    ItemCondition,
+    ItemSnapshot,
+    ItemStateError,
+    ItemStatus,
+    ReconciliationReport,
+    Vault,
+    VaultSummary,
+)
