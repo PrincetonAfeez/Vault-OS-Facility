@@ -127,3 +127,11 @@ def parse_schedule(record: dict[str, str] | None) -> GateSchedule | None:
         start_time=time.fromisoformat(record["start_time"]),
         end_time=time.fromisoformat(record["end_time"]),
     )
+
+def schedule_record(schedule: GateSchedule | None) -> dict[str, str] | None:
+    if schedule is None:
+        return None
+    return {
+        "start_time": schedule.start_time.isoformat(timespec="minutes"),
+        "end_time": schedule.end_time.isoformat(timespec="minutes"),
+    }
