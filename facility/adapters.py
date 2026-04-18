@@ -116,3 +116,14 @@ def parse_access_level(value: AccessAccessLevel | str | int) -> AccessAccessLeve
     if isinstance(value, int):
         return AccessAccessLevel(value)
     return AccessAccessLevel.from_string(str(value))
+
+def to_vault_access_level(level: AccessAccessLevel | str | int) -> VaultAccessLevel:
+    return ACCESS_TO_VAULT_LEVEL[parse_access_level(level)]
+
+def parse_schedule(record: dict[str, str] | None) -> GateSchedule | None:
+    if record is None:
+        return None
+    return GateSchedule(
+        start_time=time.fromisoformat(record["start_time"]),
+        end_time=time.fromisoformat(record["end_time"]),
+    )
