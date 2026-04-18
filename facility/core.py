@@ -69,3 +69,33 @@ class Facility(
         self.event_log = event_log
         self.person_keycards = dict(person_keycards or {})
         self.device_locations = dict(device_locations or {})
+
+    @classmethod
+    def create_demo(cls, name: str = "Vault OS Demo Facility") -> Facility:
+        from .demo import configure_demo_facility
+
+        event_bus, alert_manager, event_log = cls._build_event_stack()
+        facility = cls(
+            name=name,
+            device_panel=seed_demo_panel(),
+            access=build_demo_controller(),
+            personnel=PersonnelRegistry(),
+            vault=seed_demo_vault(),
+            event_bus=event_bus,
+            alert_manager=alert_manager,
+            invite_manager=InviteManager(),
+            event_log=event_log,
+            device_locations={
+                "CAM-01": "Main Entrance",
+                "LOCK-01": "Vault Threshold",
+                "ALARM-01": "North Wing",
+                "THERM-01": "Server Room",
+            },
+        )
+
+        for device in facility.device_panel.devices:
+            device.power_on()
+
+        configure_demo_facility(facility)
+        return facility
+
