@@ -118,3 +118,9 @@ class Facility(
         from .persistence import read_facility_json
 
         return read_facility_json(path, facility_cls=cls)
+
+    def to_record(self) -> dict[str, Any]:
+        from .persistence import facility_to_record
+
+        return facility_to_record(self)
+
