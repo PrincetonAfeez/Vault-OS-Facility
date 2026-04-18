@@ -1,0 +1,45 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Packaging / installers
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Test & type tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+htmlcov/
+coverage.xml
+.tox/
+.nox/
+
+# Editors / OS
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
+
+# Optional: local facility state dumps (uncomment if you never commit these)
+# *_state.json
+# facility*.json
