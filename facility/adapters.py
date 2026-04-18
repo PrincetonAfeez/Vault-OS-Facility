@@ -106,3 +106,7 @@ def to_utc(moment: datetime | None = None) -> datetime:
         return current.astimezone(UTC)
     return current.astimezone(UTC)
 
+def facility_date(moment: datetime | None = None) -> date:
+    current = moment or datetime.now()
+    return naive_facility_moment(current).date()
+
