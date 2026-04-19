@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "facility.schema.json",
+  "title": "Vault OS Facility State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "name",
+    "device_locations",
+    "person_keycards",
+    "devices",
+    "access",
+    "personnel",
+    "vault",
+    "events",
+    "invites"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "device_locations": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "person_keycards": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "devices": {
+      "$ref": "devices.schema.json"
+    },
+    "access": {
+      "$ref": "access.schema.json"
+    },
+    "personnel": {
+      "$ref": "personnel.schema.json"
+    },
+    "vault": {
+      "$ref": "vault.schema.json"
+    },
+    "events": {
+      "$ref": "events.schema.json"
+    },
+    "invites": {
+      "$ref": "invites.schema.json"
+    }
+  }
+}

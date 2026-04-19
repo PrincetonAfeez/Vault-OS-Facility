@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "access.schema.json",
+  "title": "Facility Access State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cards",
+    "gates",
+    "log_entries",
+    "log_alerts",
+    "monitor"
+  ],
+  "properties": {
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "card_id",
+          "owner_name",
+          "access_level",
+          "issue_date",
+          "expiry_date",
+          "active",
+          "revoked",
+          "revocation_reason",
+          "revoked_at"
+        ],
+        "properties": {
+          "card_id": {
+            "type": "string"
+          },
+          "owner_name": {
+            "type": "string"
+          },
+          "access_level": {
+            "type": "string"
+          },
+          "issue_date": {
+            "$ref": "common.schema.json#/$defs/isoDate"
+          },
+          "expiry_date": {
+            "$ref": "common.schema.json#/$defs/isoDate"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "revoked": {
+            "type": "boolean"
+          },
+          "revocation_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revoked_at": {
+            "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "location",
+          "required_access_level",
+          "time_window"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "required_access_level": {
+            "type": "string"
+          },
+          "time_window": {
+            "description": "Serialized access schedule. Exact shape comes from the Access subsystem helper and is left flexible here.",
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "array"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "log_entries": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/logEntry"
+      }
+    },
+    "log_alerts": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/securityAlert"
+      }
+    },
+    "monitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "threshold",
+        "window_seconds",
+        "flagged_cards"
+      ],
+      "properties": {
+        "threshold": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "window_seconds": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "flagged_cards": {
+          "type": "array",
+          "items": {
+            "$ref": "common.schema.json#/$defs/securityAlert"
+          }
+        }
+      }
+    }
+  }
+}

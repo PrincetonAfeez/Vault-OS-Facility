@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "personnel.schema.json",
+  "title": "Facility Personnel State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "people"
+  ],
+  "properties": {
+    "people": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "unique_id",
+              "name",
+              "contact_info",
+              "on_site",
+              "checked_in_at",
+              "location",
+              "department",
+              "role_title",
+              "hire_date",
+              "assigned_keycard_id"
+            ],
+            "properties": {
+              "type": {
+                "const": "Employee"
+              },
+              "unique_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "contact_info": {
+                "type": "string"
+              },
+              "on_site": {
+                "type": "boolean"
+              },
+              "checked_in_at": {
+                "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+              },
+              "location": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "department": {
+                "type": "string"
+              },
+              "role_title": {
+                "type": "string"
+              },
+              "hire_date": {
+                "$ref": "common.schema.json#/$defs/isoDate"
+              },
+              "assigned_keycard_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "unique_id",
+              "name",
+              "contact_info",
+              "on_site",
+              "checked_in_at",
+              "location",
+              "company_name",
+              "contract_start_date",
+              "contract_end_date",
+              "restricted_areas"
+            ],
+            "properties": {
+              "type": {
+                "const": "Contractor"
+              },
+              "unique_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "contact_info": {
+                "type": "string"
+              },
+              "on_site": {
+                "type": "boolean"
+              },
+              "checked_in_at": {
+                "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+              },
+              "location": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "company_name": {
+                "type": "string"
+              },
+              "contract_start_date": {
+                "$ref": "common.schema.json#/$defs/isoDate"
+              },
+              "contract_end_date": {
+                "$ref": "common.schema.json#/$defs/isoDate"
+              },
+              "restricted_areas": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "unique_id",
+              "name",
+              "contact_info",
+              "on_site",
+              "checked_in_at",
+              "location",
+              "host_employee_id",
+              "visit_purpose",
+              "expected_duration_minutes"
+            ],
+            "properties": {
+              "type": {
+                "const": "Visitor"
+              },
+              "unique_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "contact_info": {
+                "type": "string"
+              },
+              "on_site": {
+                "type": "boolean"
+              },
+              "checked_in_at": {
+                "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+              },
+              "location": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "host_employee_id": {
+                "type": "string"
+              },
+              "visit_purpose": {
+                "type": "string"
+              },
+              "expected_duration_minutes": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

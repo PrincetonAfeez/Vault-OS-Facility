@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vault.schema.json",
+  "title": "Facility Vault State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sequence",
+    "items"
+  ],
+  "properties": {
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item_id",
+          "name",
+          "category",
+          "monetary_value",
+          "status",
+          "condition",
+          "current_holder",
+          "custody_chain"
+        ],
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "monetary_value": {
+            "type": "string",
+            "description": "Decimal serialized as a string.",
+            "pattern": "^-?\\d+(\\.\\d+)?$"
+          },
+          "status": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "current_holder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "custody_chain": {
+            "type": "array",
+            "items": {
+              "$ref": "common.schema.json#/$defs/custodyRecord"
+            }
+          }
+        }
+      }
+    }
+  }
+}

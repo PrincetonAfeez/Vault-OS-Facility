@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "devices.schema.json",
+  "title": "Facility Device Panel State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "devices"
+  ],
+  "properties": {
+    "devices": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "device_id",
+              "name",
+              "powered_on",
+              "activity_log",
+              "recording",
+              "recording_started_at",
+              "night_mode",
+              "motion_detection",
+              "recording_history"
+            ],
+            "properties": {
+              "type": {
+                "const": "Camera"
+              },
+              "device_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "powered_on": {
+                "type": "boolean"
+              },
+              "activity_log": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/activityEntry"
+                }
+              },
+              "recording": {
+                "type": "boolean"
+              },
+              "recording_started_at": {
+                "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+              },
+              "night_mode": {
+                "type": "boolean"
+              },
+              "motion_detection": {
+                "type": "boolean"
+              },
+              "recording_history": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/recordingSession"
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "device_id",
+              "name",
+              "powered_on",
+              "activity_log",
+              "keycode",
+              "locked",
+              "failed_attempts",
+              "lockout_threshold",
+              "lockout_duration_seconds",
+              "auto_lock_seconds",
+              "locked_out_until",
+              "last_unlocked_at"
+            ],
+            "properties": {
+              "type": {
+                "const": "Lock"
+              },
+              "device_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "powered_on": {
+                "type": "boolean"
+              },
+              "activity_log": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/activityEntry"
+                }
+              },
+              "keycode": {
+                "type": "string"
+              },
+              "locked": {
+                "type": "boolean"
+              },
+              "failed_attempts": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "lockout_threshold": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "lockout_duration_seconds": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "auto_lock_seconds": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "locked_out_until": {
+                "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+              },
+              "last_unlocked_at": {
+                "$ref": "common.schema.json#/$defs/nullableIsoDateTime"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "device_id",
+              "name",
+              "powered_on",
+              "activity_log",
+              "reset_code",
+              "arm_mode",
+              "triggered",
+              "silent_alarm"
+            ],
+            "properties": {
+              "type": {
+                "const": "AlarmSystem"
+              },
+              "device_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "powered_on": {
+                "type": "boolean"
+              },
+              "activity_log": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/activityEntry"
+                }
+              },
+              "reset_code": {
+                "type": "string"
+              },
+              "arm_mode": {
+                "type": "string"
+              },
+              "triggered": {
+                "type": "boolean"
+              },
+              "silent_alarm": {
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "device_id",
+              "name",
+              "powered_on",
+              "activity_log",
+              "target_temperature",
+              "current_temperature",
+              "alert_threshold",
+              "mode"
+            ],
+            "properties": {
+              "type": {
+                "const": "Thermostat"
+              },
+              "device_id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "powered_on": {
+                "type": "boolean"
+              },
+              "activity_log": {
+                "type": "array",
+                "items": {
+                  "$ref": "common.schema.json#/$defs/activityEntry"
+                }
+              },
+              "target_temperature": {
+                "type": "number"
+              },
+              "current_temperature": {
+                "type": "number"
+              },
+              "alert_threshold": {
+                "type": "number",
+                "minimum": 0
+              },
+              "mode": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

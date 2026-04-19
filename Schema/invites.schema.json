@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "invites.schema.json",
+  "title": "Facility Invites State",
+  "description": "InviteManager.to_record() output is passed through directly by the integration layer, so this schema remains intentionally permissive.",
+  "type": "object",
+  "additionalProperties": true
+}

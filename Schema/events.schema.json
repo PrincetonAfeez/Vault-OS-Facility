@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "events.schema.json",
+  "title": "Facility Events and Alerts State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "max_history",
+    "dedup_threshold",
+    "dedup_window_seconds",
+    "history",
+    "alerts"
+  ],
+  "properties": {
+    "max_history": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dedup_threshold": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dedup_window_seconds": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/event"
+      }
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/alert"
+      }
+    }
+  }
+}

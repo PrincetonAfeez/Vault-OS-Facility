@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "title": "Facility Common Types",
+  "$defs": {
+    "isoDate": {
+      "type": "string",
+      "format": "date"
+    },
+    "isoDateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "nullableIsoDateTime": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "stringMap": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "logEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timestamp",
+        "keycard_id",
+        "gate_name",
+        "granted",
+        "reason"
+      ],
+      "properties": {
+        "timestamp": {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        "keycard_id": {
+          "type": "string"
+        },
+        "gate_name": {
+          "type": "string"
+        },
+        "granted": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "securityAlert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timestamp",
+        "keycard_id",
+        "denied_attempts",
+        "window_minutes",
+        "message"
+      ],
+      "properties": {
+        "timestamp": {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        "keycard_id": {
+          "type": "string"
+        },
+        "denied_attempts": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "window_minutes": {
+          "type": "number",
+          "minimum": 0
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "activityEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timestamp",
+        "message"
+      ],
+      "properties": {
+        "timestamp": {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "recordingSession": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "started_at",
+        "stopped_at"
+      ],
+      "properties": {
+        "started_at": {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        "stopped_at": {
+          "$ref": "#/$defs/isoDateTime"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "event_type",
+        "severity",
+        "message",
+        "timestamp",
+        "event_id"
+      ],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "event_type": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "timestamp": {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        "event_id": {
+          "type": "string"
+        }
+      }
+    },
+    "alert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "state",
+        "acknowledged_by",
+        "acknowledged_at",
+        "resolution_notes"
+      ],
+      "properties": {
+        "event": {
+          "$ref": "#/$defs/event"
+        },
+        "state": {
+          "type": "string"
+        },
+        "acknowledged_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "acknowledged_at": {
+          "$ref": "#/$defs/nullableIsoDateTime"
+        },
+        "resolution_notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "custodyRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timestamp",
+        "item_id",
+        "action",
+        "actor_name",
+        "actor_access_level",
+        "notes"
+      ],
+      "properties": {
+        "timestamp": {
+          "$ref": "#/$defs/isoDateTime"
+        },
+        "item_id": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "actor_name": {
+          "type": "string"
+        },
+        "actor_access_level": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
