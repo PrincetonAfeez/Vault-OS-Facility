@@ -266,3 +266,20 @@ def vault_record(facility: Facility) -> dict[str, Any]:
         )
     return {"sequence": facility.vault.persisted_issue_sequence, "items": items}
 
+def vault_from_record(record: dict[str, Any]) -> Vault:
+    vault = Vault()
+    items: dict[str, Item] = {}
+    for item_record in record["items"]:
+        item = Item(
+            item_id=item_record["item_id"],
+            name=item_record["name"],
+            category=item_record["category"],
+            monetary_value=Decimal(item_record["monetary_value"]),
+            status=ItemStatus.parse(item_record["status"]),
+            condition=ItemCondition.parse(item_record["condition"]),
+            current_holder=item_record["current_holder"],
+        )
+        item.apply_restored_custody_chain([custody_from_record(entry) for entry in item_record["custody_chain"]])
+        items[item.item_id] = item
+    vault.apply_restored_inventory(sequence=record["sequence"], items=items)
+    return vault
