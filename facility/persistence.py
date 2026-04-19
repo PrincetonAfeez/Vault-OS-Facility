@@ -292,3 +292,21 @@ def events_record(facility: Facility) -> dict[str, Any]:
         "history": [event_record(event) for event in facility.event_bus.history],
         "alerts": [alert_record(alert) for alert in facility.alert_manager.all_alerts()],
     }
+
+def events_stack_from_record(record: dict[str, Any]) -> tuple[EventBus, AlertManager, LogHandler]:
+    alert_manager = AlertManager()
+    restored_alert_map = {alert.alert_id: alert for alert in (_alert_from_record(item) for item in record["alerts"])}
+    alert_manager.replace_alerts_for_restore(restored_alert_map)
+
+    event_bus = EventBus(
+        max_history=record["max_history"],
+        dedup_threshold=record["dedup_threshold"],
+        dedup_window=timedelta(seconds=record["dedup_window_seconds"]),
+    )
+    event_log = LogHandler()
+    event_bus.subscribe(event_log, name="facility-log")
+    event_bus.subscribe(AlertHandler(alert_manager), name="facility-alerting")
+    restored_events = [event_from_record(item) for item in record["history"]]
+    event_bus.restore_history_snapshot(restored_events)
+    event_log.replace_captured_events(list(restored_events), [format_event(event) for event in restored_events])
+    return event_bus, alert_manager, event_log
