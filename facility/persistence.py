@@ -601,3 +601,13 @@ def custody_record(entry: CustodyRecord) -> dict[str, str]:
         "actor_access_level": entry.actor_access_level.name,
         "notes": entry.notes,
     }
+
+def custody_from_record(record: dict[str, str]) -> CustodyRecord:
+    return CustodyRecord(
+        timestamp=datetime.fromisoformat(record["timestamp"]),
+        item_id=record["item_id"],
+        action=AuditAction.parse(record["action"]),
+        actor_name=record["actor_name"],
+        actor_access_level=VaultAccessLevel.parse(record["actor_access_level"]),
+        notes=record["notes"],
+    )
