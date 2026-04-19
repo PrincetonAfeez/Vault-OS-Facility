@@ -86,3 +86,36 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("simulate-breach", help="Run the demo breach simulation.")
     return parser
 
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
+    args = parser.parse_args(_normalize_global_options(argv))
+
+    _cli_errors = (
+        FacilityError,
+        CheckInError,
+        KeyError,
+        ValueError,
+        InviteValidationError,
+        ItemStateError,
+        AccessDeniedError,
+        DeviceAuthorizationError,
+        DeviceLockoutError,
+        json.JSONDecodeError,
+        OSError,
+    )
+    try:
+        facility = _resolve_facility(args)
+        exit_code = _dispatch(args, facility)
+        if args.domain == "facility" and args.facility_action == "save":
+            return exit_code
+        if args.save:
+            destination = facility.save(args.save)
+            print(f"Saved facility state to {destination}")
+        return exit_code
+    except _cli_errors as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print(f"Unexpected error: {exc}", file=sys.stderr)
+        return 1
+
