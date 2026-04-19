@@ -72,3 +72,8 @@ def write_facility_json(facility: Facility, path: str | Path) -> Path:
     destination.write_text(json.dumps(facility_to_record(facility), indent=2) + "\n", encoding="utf-8")
     return destination
 
+def read_facility_json(path: str | Path, *, facility_cls: type[Facility] | None = None) -> Facility:
+    cls = facility_cls or Facility
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    return facility_from_record(payload, facility_cls=cls)
+
