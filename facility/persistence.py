@@ -199,3 +199,24 @@ def access_from_record(record: dict[str, Any]) -> AccessController:
     }
     monitor.replace_flagged_cards_for_restore(flagged)
     return AccessController(registry=registry, gates=gates, access_log=access_log, monitor=monitor)
+
+def personnel_record(facility: Facility) -> dict[str, Any]:
+    return {"people": [person_record(person) for person in facility.personnel.iter_people_sorted_by_id()]}
+
+def personnel_from_record(record: dict[str, Any]) -> PersonnelRegistry:
+    registry = PersonnelRegistry()
+    onsite_records: list[dict[str, Any]] = []
+    for item in record["people"]:
+        person = person_from_record(item)
+        registry.register(person)
+        if item["on_site"]:
+            onsite_records.append(item)
+    for item in onsite_records:
+        assert item["checked_in_at"] is not None
+        registry.restore_onsite_snapshot(
+            item["unique_id"],
+            checked_in_at=datetime.fromisoformat(item["checked_in_at"]),
+            location=item["location"],
+        )
+    return registry
+
