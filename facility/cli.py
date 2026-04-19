@@ -272,3 +272,18 @@ def _parse_datetime(value: str | None) -> datetime | None:
         return None
     return datetime.fromisoformat(value)
 
+
+def _normalize_global_options(argv: list[str] | None) -> list[str]:
+    items = list(sys.argv[1:] if argv is None else argv)
+    extracted: list[str] = []
+    remaining: list[str] = []
+    index = 0
+    while index < len(items):
+        token = items[index]
+        if token in {"--state", "--save"} and index + 1 < len(items):
+            extracted.extend([token, items[index + 1]])
+            index += 2
+            continue
+        remaining.append(token)
+        index += 1
+    return extracted + remaining
