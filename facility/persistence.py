@@ -513,3 +513,59 @@ def device_record(device: Device) -> dict[str, Any]:
         )
     return rec
 
+def device_from_record(record: dict[str, Any]) -> Device:
+    device_type = record["type"]
+    if device_type == "Camera":
+        device: Device = Camera(record["device_id"], record["name"])
+        device._recording = record["recording"]
+        device._recording_started_at = (
+            datetime.fromisoformat(record["recording_started_at"])
+            if record["recording_started_at"]
+            else None
+        )
+        device._night_mode = record["night_mode"]
+        device._motion_detection = record["motion_detection"]
+        device._recording_history = [
+            recording_session_from_record(item) for item in record["recording_history"]
+        ]
+    elif device_type == "Lock":
+        device = Lock(
+            record["device_id"],
+            record["name"],
+            keycode=record["keycode"],
+            lockout_threshold=record["lockout_threshold"],
+            lockout_duration_seconds=record["lockout_duration_seconds"],
+            auto_lock_seconds=record["auto_lock_seconds"],
+        )
+        device._locked = record["locked"]
+        device._failed_attempts = record["failed_attempts"]
+        device._locked_out_until = (
+            datetime.fromisoformat(record["locked_out_until"]) if record["locked_out_until"] else None
+        )
+        device._last_unlocked_at = (
+            datetime.fromisoformat(record["last_unlocked_at"]) if record["last_unlocked_at"] else None
+        )
+    elif device_type == "AlarmSystem":
+        device = AlarmSystem(
+            record["device_id"],
+            record["name"],
+            reset_code=record["reset_code"],
+        )
+        device._arm_mode = record["arm_mode"]
+        device._triggered = record["triggered"]
+        device._silent_alarm = record["silent_alarm"]
+    elif device_type == "Thermostat":
+        device = Thermostat(
+            record["device_id"],
+            record["name"],
+            target_temperature=record["target_temperature"],
+            current_temperature=record["current_temperature"],
+            alert_threshold=record["alert_threshold"],
+        )
+        device._mode = record["mode"]
+    else:
+        raise FacilityStateError(f"Unsupported device type {device_type!r}.")
+
+    device._powered_on = record["powered_on"]
+    device._activity_log = [activity_from_record(item) for item in record["activity_log"]]
+    return device
