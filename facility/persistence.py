@@ -340,3 +340,22 @@ def alert_record(alert: Alert) -> dict[str, Any]:
         "acknowledged_at": alert.acknowledged_at.isoformat() if alert.acknowledged_at else None,
         "resolution_notes": alert.resolution_notes,
     }
+
+def _alert_from_record(record: dict[str, Any]) -> Alert:
+    alert = Alert(event=event_from_record(record["event"]))
+    alert.state = AlertState(record["state"])
+    alert.acknowledged_by = record["acknowledged_by"]
+    alert.acknowledged_at = (
+        datetime.fromisoformat(record["acknowledged_at"]) if record["acknowledged_at"] else None
+    )
+    alert.resolution_notes = record["resolution_notes"]
+    return alert
+
+def log_entry_record(entry: AccessLogEntry) -> dict[str, Any]:
+    return {
+        "timestamp": entry.timestamp.isoformat(),
+        "keycard_id": entry.keycard_id,
+        "gate_name": entry.gate_name,
+        "granted": entry.granted,
+        "reason": entry.reason,
+    }
