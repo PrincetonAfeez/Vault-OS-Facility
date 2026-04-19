@@ -359,3 +359,12 @@ def log_entry_record(entry: AccessLogEntry) -> dict[str, Any]:
         "granted": entry.granted,
         "reason": entry.reason,
     }
+
+def log_entry_from_record(record: dict[str, Any]) -> AccessLogEntry:
+    return AccessLogEntry(
+        timestamp=datetime.fromisoformat(record["timestamp"]),
+        keycard_id=record["keycard_id"],
+        gate_name=record["gate_name"],
+        granted=record["granted"],
+        reason=record["reason"],
+    )
