@@ -77,3 +77,16 @@ def read_facility_json(path: str | Path, *, facility_cls: type[Facility] | None 
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     return facility_from_record(payload, facility_cls=cls)
 
+def facility_to_record(facility: Facility) -> dict[str, Any]:
+    return {
+        "schema_version": FACILITY_RECORD_VERSION,
+        "name": facility.name,
+        "device_locations": dict(sorted(facility.device_locations.items())),
+        "person_keycards": dict(sorted(facility._linked_cards().items())),
+        "devices": device_panel_record(facility),
+        "access": access_record(facility),
+        "personnel": personnel_record(facility),
+        "vault": vault_record(facility),
+        "events": events_record(facility),
+        "invites": facility.invite_manager.to_record(),
+    }
