@@ -572,3 +572,15 @@ def device_from_record(record: dict[str, Any]) -> Device:
 
 def activity_record(entry: ActivityEntry) -> dict[str, str]:
     return {"timestamp": entry.timestamp.isoformat(), "message": entry.message}
+
+def activity_from_record(record: dict[str, str]) -> ActivityEntry:
+    return ActivityEntry(
+        timestamp=datetime.fromisoformat(record["timestamp"]),
+        message=record["message"],
+    )
+
+def recording_session_record(session: RecordingSession) -> dict[str, str]:
+    return {
+        "started_at": session.started_at.isoformat(),
+        "stopped_at": session.stopped_at.isoformat(),
+    }
