@@ -108,3 +108,42 @@ def facility_from_record(record: dict[str, Any], *, facility_cls: type[Facility]
         device_locations=record.get("device_locations", {}),
     )
 
+def access_record(facility: Facility) -> dict[str, Any]:
+    cards = []
+    for card in facility.access.registry.all_cards():
+        cards.append(
+            {
+                "card_id": card.card_id,
+                "owner_name": card.owner_name,
+                "access_level": card.access_level.name,
+                "issue_date": card.issue_date.isoformat(),
+                "expiry_date": card.expiry_date.isoformat(),
+                "active": card.active,
+                "revoked": card.revoked,
+                "revocation_reason": card.revocation_reason,
+                "revoked_at": card.revoked_at.isoformat() if card.revoked_at else None,
+            }
+        )
+    gates = [
+        {
+            "name": gate.name,
+            "location": gate.location,
+            "required_access_level": gate.required_access_level.name,
+            "time_window": schedule_record(gate.time_window),
+        }
+        for gate in facility.access.list_gates()
+    ]
+    return {
+        "cards": cards,
+        "gates": gates,
+        "log_entries": [log_entry_record(entry) for entry in facility.access.log.entries()],
+        "log_alerts": [security_alert_record(alert) for alert in facility.access.log.alerts()],
+        "monitor": {
+            "threshold": facility.access.monitor.threshold,
+            "window_seconds": int(facility.access.monitor.window.total_seconds()),
+            "flagged_cards": [
+                security_alert_record(alert) for alert in facility.access.flagged_cards()
+            ],
+        },
+    }
+
