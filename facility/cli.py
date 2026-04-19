@@ -170,3 +170,20 @@ def _dispatch(args: argparse.Namespace, facility: Facility) -> int:
             print(f"{event.event_type}: {event.message}")
         return 0
     raise ValueError(f"Unsupported command domain: {args.domain}")
+
+
+def _handle_facility(args: argparse.Namespace, facility: Facility) -> int:
+    if args.facility_action == "init":
+        print(f"Initialized {facility.name}")
+        _render_status(facility, recent=3)
+        return 0
+    if args.facility_action == "load":
+        print(f"Loaded {facility.name} from {args.path}")
+        _render_status(facility, recent=3)
+        return 0
+    if args.facility_action == "save":
+        destination = facility.save(args.path)
+        print(f"Saved facility state to {destination}")
+        return 0
+    raise ValueError(f"Unsupported facility action: {args.facility_action}")
+
