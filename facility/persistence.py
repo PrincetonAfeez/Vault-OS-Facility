@@ -249,3 +249,20 @@ def vault_record(facility: Facility) -> dict[str, Any]:
         )
     return {"sequence": facility.vault.persisted_issue_sequence, "items": items}
 
+def vault_record(facility: Facility) -> dict[str, Any]:
+    items = []
+    for item in facility.vault.iter_items_sorted_by_id():
+        items.append(
+            {
+                "item_id": item.item_id,
+                "name": item.name,
+                "category": item.category,
+                "monetary_value": money_string(item.monetary_value),
+                "status": item.status.value,
+                "condition": item.condition.value,
+                "current_holder": item.current_holder,
+                "custody_chain": [custody_record(entry) for entry in item.custody_chain],
+            }
+        )
+    return {"sequence": facility.vault.persisted_issue_sequence, "items": items}
+
