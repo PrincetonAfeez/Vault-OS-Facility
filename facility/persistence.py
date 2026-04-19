@@ -368,3 +368,12 @@ def log_entry_from_record(record: dict[str, Any]) -> AccessLogEntry:
         granted=record["granted"],
         reason=record["reason"],
     )
+
+def security_alert_record(alert: SecurityAlert) -> dict[str, Any]:
+    return {
+        "timestamp": alert.timestamp.isoformat(),
+        "keycard_id": alert.keycard_id,
+        "denied_attempts": alert.denied_attempts,
+        "window_minutes": alert.window_minutes,
+        "message": alert.message,
+    }
