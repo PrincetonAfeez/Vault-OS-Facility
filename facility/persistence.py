@@ -569,3 +569,6 @@ def device_from_record(record: dict[str, Any]) -> Device:
     device._powered_on = record["powered_on"]
     device._activity_log = [activity_from_record(item) for item in record["activity_log"]]
     return device
+
+def activity_record(entry: ActivityEntry) -> dict[str, str]:
+    return {"timestamp": entry.timestamp.isoformat(), "message": entry.message}
