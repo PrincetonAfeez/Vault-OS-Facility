@@ -425,3 +425,33 @@ def person_record(person: Person) -> dict[str, Any]:
         )
     return rec
 
+def person_from_record(record: dict[str, Any]) -> Person:
+    person_type = record["type"]
+    if person_type == "Employee":
+        return Employee(
+            unique_id=record["unique_id"],
+            name=record["name"],
+            contact_info=record["contact_info"],
+            department=record["department"],
+            role_title=record["role_title"],
+            hire_date=date.fromisoformat(record["hire_date"]),
+            assigned_keycard_id=record["assigned_keycard_id"],
+        )
+    if person_type == "Contractor":
+        return PERSON_TYPES["Contractor"](
+            unique_id=record["unique_id"],
+            name=record["name"],
+            contact_info=record["contact_info"],
+            company_name=record["company_name"],
+            contract_start_date=date.fromisoformat(record["contract_start_date"]),
+            contract_end_date=date.fromisoformat(record["contract_end_date"]),
+            restricted_areas=list(record["restricted_areas"]),
+        )
+    return PERSON_TYPES["Visitor"](
+        unique_id=record["unique_id"],
+        name=record["name"],
+        contact_info=record["contact_info"],
+        host_employee_id=record["host_employee_id"],
+        visit_purpose=record["visit_purpose"],
+        expected_duration_minutes=record["expected_duration_minutes"],
+    )
