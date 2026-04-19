@@ -321,3 +321,14 @@ def event_record(event: Event) -> dict[str, str]:
         "timestamp": event.timestamp.isoformat(),
         "event_id": event.event_id,
     }
+
+def event_from_record(record: dict[str, str]) -> Event:
+    return Event(
+        source=record["source"],
+        event_type=record["event_type"],
+        severity=record["severity"],
+        message=record["message"],
+        timestamp=datetime.fromisoformat(record["timestamp"]),
+        event_id=record["event_id"],
+    )
+
