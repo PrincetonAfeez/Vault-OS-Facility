@@ -90,3 +90,21 @@ def facility_to_record(facility: Facility) -> dict[str, Any]:
         "events": events_record(facility),
         "invites": facility.invite_manager.to_record(),
     }
+
+def facility_from_record(record: dict[str, Any], *, facility_cls: type[Facility]) -> Facility:
+    ensure_facility_record_version_supported(record)
+    event_bus, alert_manager, event_log = events_stack_from_record(record["events"])
+    return facility_cls(
+        name=record["name"],
+        device_panel=device_panel_from_record(record["devices"]),
+        access=access_from_record(record["access"]),
+        personnel=personnel_from_record(record["personnel"]),
+        vault=vault_from_record(record["vault"]),
+        event_bus=event_bus,
+        alert_manager=alert_manager,
+        invite_manager=InviteManager.from_record(record["invites"]),
+        event_log=event_log,
+        person_keycards=record.get("person_keycards", {}),
+        device_locations=record.get("device_locations", {}),
+    )
+
