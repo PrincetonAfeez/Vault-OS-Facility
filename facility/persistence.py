@@ -584,3 +584,10 @@ def recording_session_record(session: RecordingSession) -> dict[str, str]:
         "started_at": session.started_at.isoformat(),
         "stopped_at": session.stopped_at.isoformat(),
     }
+
+
+def recording_session_from_record(record: dict[str, str]) -> RecordingSession:
+    return RecordingSession(
+        started_at=datetime.fromisoformat(record["started_at"]),
+        stopped_at=datetime.fromisoformat(record["stopped_at"]),
+    )
