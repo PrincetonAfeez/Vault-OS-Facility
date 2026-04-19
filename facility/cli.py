@@ -187,3 +187,19 @@ def _handle_facility(args: argparse.Namespace, facility: Facility) -> int:
         return 0
     raise ValueError(f"Unsupported facility action: {args.facility_action}")
 
+def _handle_personnel(args: argparse.Namespace, facility: Facility) -> int:
+    if args.personnel_action == "check-in":
+        person = facility.personnel_check_in(
+            args.person_id,
+            location=args.location,
+            checked_in_at=_parse_datetime(args.at),
+        )
+        print(f"{person.unique_id} checked in at {person.location or 'unspecified location'}.")
+        return 0
+    result = facility.personnel_check_out(args.person_id)
+    print(f"{args.person_id} checked out.")
+    for warning in result["warnings"]:
+        print(f"Warning: {warning}")
+    for item in result["checked_out_items"]:
+        print(f"Held item: {item.item_id} {item.name}")
+    return 0
