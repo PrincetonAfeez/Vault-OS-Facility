@@ -266,3 +266,9 @@ def _render_status(facility: Facility, *, recent: int) -> None:
             print(f"  {line}")
     else:
         print("  none")
+
+def _parse_datetime(value: str | None) -> datetime | None:
+    if value is None:
+        return None
+    return datetime.fromisoformat(value)
+
