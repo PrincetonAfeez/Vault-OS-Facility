@@ -128,3 +128,45 @@ def _resolve_facility(args: argparse.Namespace) -> Facility:
         return Facility.load(args.state)
     return Facility.create_demo()
 
+def _dispatch(args: argparse.Namespace, facility: Facility) -> int:
+    if args.domain == "facility":
+        return _handle_facility(args, facility)
+    if args.domain == "status":
+        _render_status(facility, recent=args.recent)
+        return 0
+    if args.domain == "access":
+        moment = _parse_datetime(args.at)
+        decision = facility.gate_check(args.card_id, args.gate_name, timestamp=moment)
+        outcome = "GRANTED" if decision.granted else "DENIED"
+        print(f"{outcome}: {decision.keycard_id} at {decision.gate_name} -> {decision.reason}")
+        if decision.warning:
+            print(f"Warning: {decision.warning}")
+        return 0
+    if args.domain == "personnel":
+        return _handle_personnel(args, facility)
+    if args.domain == "vault":
+        return _handle_vault(args, facility)
+    if args.domain == "invite":
+        return _handle_invites(args, facility)
+    if args.domain == "event":
+        for line in facility.status_dashboard(recent_event_limit=args.limit)["recent_events"]:
+            print(line)
+        return 0
+    if args.domain == "alert":
+        alerts = facility.active_alerts()
+        if not alerts:
+            print("No active alerts.")
+            return 0
+        for alert in alerts:
+            print(
+                f"{alert.alert_id} | {alert.state.value} | {alert.severity.name} | "
+                f"{alert.source} | {alert.event.event_type} | {alert.event.message}"
+            )
+        return 0
+    if args.domain == "simulate-breach":
+        events = facility.simulate_breach()
+        print(f"Simulated breach with {len(events)} event(s).")
+        for event in events:
+            print(f"{event.event_type}: {event.message}")
+        return 0
+    raise ValueError(f"Unsupported command domain: {args.domain}")
