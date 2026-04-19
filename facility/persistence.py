@@ -377,3 +377,12 @@ def security_alert_record(alert: SecurityAlert) -> dict[str, Any]:
         "window_minutes": alert.window_minutes,
         "message": alert.message,
     }
+
+def security_alert_from_record(record: dict[str, Any]) -> SecurityAlert:
+    return SecurityAlert(
+        timestamp=datetime.fromisoformat(record["timestamp"]),
+        keycard_id=record["keycard_id"],
+        denied_attempts=record["denied_attempts"],
+        window_minutes=record["window_minutes"],
+        message=record["message"],
+    )
