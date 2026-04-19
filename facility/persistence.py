@@ -386,3 +386,42 @@ def security_alert_from_record(record: dict[str, Any]) -> SecurityAlert:
         window_minutes=record["window_minutes"],
         message=record["message"],
     )
+
+def person_record(person: Person) -> dict[str, Any]:
+    rec: dict[str, Any] = {
+        "type": person.person_type,
+        "unique_id": person.unique_id,
+        "name": person.name,
+        "contact_info": person.contact_info,
+        "on_site": person.on_site,
+        "checked_in_at": person.checked_in_at.isoformat() if person.checked_in_at else None,
+        "location": person.location,
+    }
+    if isinstance(person, Employee):
+        rec.update(
+            {
+                "department": person.department,
+                "role_title": person.role_title,
+                "hire_date": person.hire_date.isoformat(),
+                "assigned_keycard_id": person.assigned_keycard_id,
+            }
+        )
+    elif isinstance(person, Contractor):
+        rec.update(
+            {
+                "company_name": person.company_name,
+                "contract_start_date": person.contract_start_date.isoformat(),
+                "contract_end_date": person.contract_end_date.isoformat(),
+                "restricted_areas": list(person.restricted_areas),
+            }
+        )
+    else:
+        rec.update(
+            {
+                "host_employee_id": person.host_employee_id,
+                "visit_purpose": person.visit_purpose,
+                "expected_duration_minutes": person.expected_duration_minutes,
+            }
+        )
+    return rec
+
