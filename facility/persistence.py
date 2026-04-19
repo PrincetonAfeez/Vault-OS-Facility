@@ -591,3 +591,13 @@ def recording_session_from_record(record: dict[str, str]) -> RecordingSession:
         started_at=datetime.fromisoformat(record["started_at"]),
         stopped_at=datetime.fromisoformat(record["stopped_at"]),
     )
+
+def custody_record(entry: CustodyRecord) -> dict[str, str]:
+    return {
+        "timestamp": entry.timestamp.isoformat(),
+        "item_id": entry.item_id,
+        "action": entry.action.value,
+        "actor_name": entry.actor_name,
+        "actor_access_level": entry.actor_access_level.name,
+        "notes": entry.notes,
+    }
