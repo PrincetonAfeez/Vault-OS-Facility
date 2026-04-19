@@ -66,3 +66,9 @@ def ensure_facility_record_version_supported(record: dict[str, Any]) -> None:
             f"Facility state schema_version {version} is not supported by this build "
             f"(maximum {FACILITY_RECORD_VERSION}). Upgrade vaultos-facility or re-export state."
         )
+
+def write_facility_json(facility: Facility, path: str | Path) -> Path:
+    destination = Path(path)
+    destination.write_text(json.dumps(facility_to_record(facility), indent=2) + "\n", encoding="utf-8")
+    return destination
+
