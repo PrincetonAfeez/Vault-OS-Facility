@@ -283,3 +283,12 @@ def vault_from_record(record: dict[str, Any]) -> Vault:
         items[item.item_id] = item
     vault.apply_restored_inventory(sequence=record["sequence"], items=items)
     return vault
+
+def events_record(facility: Facility) -> dict[str, Any]:
+    return {
+        "max_history": facility.event_bus.max_history,
+        "dedup_threshold": facility.event_bus.dedup_threshold,
+        "dedup_window_seconds": int(facility.event_bus.dedup_window.total_seconds()),
+        "history": [event_record(event) for event in facility.event_bus.history],
+        "alerts": [alert_record(alert) for alert in facility.alert_manager.all_alerts()],
+    }
