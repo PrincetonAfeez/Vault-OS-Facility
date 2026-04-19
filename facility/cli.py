@@ -119,3 +119,12 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Unexpected error: {exc}", file=sys.stderr)
         return 1
 
+def _resolve_facility(args: argparse.Namespace) -> Facility:
+    if args.domain == "facility" and args.facility_action == "init":
+        return Facility.create_demo()
+    if args.domain == "facility" and args.facility_action == "load":
+        return Facility.load(args.path)
+    if args.state:
+        return Facility.load(args.state)
+    return Facility.create_demo()
+
