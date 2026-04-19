@@ -147,3 +147,55 @@ def access_record(facility: Facility) -> dict[str, Any]:
         },
     }
 
+def access_from_record(record: dict[str, Any]) -> AccessController:
+    card_numbers = [
+        int(item["card_id"].split("-")[-1])
+        for item in record["cards"]
+        if item["card_id"].startswith("KC-")
+    ]
+    registry = CardRegistry(starting_number=(max(card_numbers) + 1) if card_numbers else 1)
+    for item in record["cards"]:
+        card = Keycard(
+            card_id=item["card_id"],
+            owner_name=item["owner_name"],
+            access_level=parse_access_level(item["access_level"]),
+            issue_date=date.fromisoformat(item["issue_date"]),
+            expiry_date=date.fromisoformat(item["expiry_date"]),
+        )
+        if item["revoked"]:
+            card.revoke(
+                item["revocation_reason"] or "No reason recorded.",
+                revoked_at=(
+                    datetime.fromisoformat(item["revoked_at"])
+                    if item["revoked_at"]
+                    else datetime.now()
+                ),
+            )
+        elif not item["active"]:
+            card.deactivate()
+        registry.ingest_restored_keycard(card)
+
+    gates = [
+        AccessGate(
+            name=item["name"],
+            location=item["location"],
+            required_access_level=parse_access_level(item["required_access_level"]),
+            time_window=parse_schedule(item["time_window"]),
+        )
+        for item in record["gates"]
+    ]
+    access_log = AccessLog()
+    access_log.replace_stored_entries(
+        [log_entry_from_record(item) for item in record["log_entries"]],
+        [security_alert_from_record(item) for item in record["log_alerts"]],
+    )
+    monitor = SuspiciousActivityMonitor(
+        threshold=record["monitor"]["threshold"],
+        window=timedelta(seconds=record["monitor"]["window_seconds"]),
+    )
+    flagged = {
+        alert.keycard_id: alert
+        for alert in (security_alert_from_record(item) for item in record["monitor"]["flagged_cards"])
+    }
+    monitor.replace_flagged_cards_for_restore(flagged)
+    return AccessController(registry=registry, gates=gates, access_log=access_log, monitor=monitor)
