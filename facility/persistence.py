@@ -220,3 +220,15 @@ def personnel_from_record(record: dict[str, Any]) -> PersonnelRegistry:
         )
     return registry
 
+def device_panel_record(facility: Facility) -> dict[str, Any]:
+    return {"devices": [device_record(device) for device in facility.device_panel.devices]}
+
+
+def device_panel_from_record(record: dict[str, Any]) -> Any:
+    from panel import DevicePanel
+
+    panel = DevicePanel()
+    for item in record["devices"]:
+        panel.add_device(device_from_record(item))
+    return panel
+
