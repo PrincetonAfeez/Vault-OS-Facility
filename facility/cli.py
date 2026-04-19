@@ -237,3 +237,32 @@ def _handle_invites(args: argparse.Namespace, facility: Facility) -> int:
     entry = facility.use_invite(args.code)
     print(entry.detail)
     return 0
+
+def _render_status(facility: Facility, *, recent: int) -> None:
+    dashboard = facility.status_dashboard(recent_event_limit=recent)
+    print(f"Facility: {dashboard['facility']}")
+    print("Devices:")
+    for item in dashboard["devices"]:
+        extras = ", ".join(
+            f"{key}={value}"
+            for key, value in item.items()
+            if key not in {"device_id", "name", "device_type"}
+        )
+        print(f"  {item['device_id']} {item['device_type']} {item['name']} [{extras}]")
+    print("Personnel on site:")
+    if dashboard["personnel_on_site"]:
+        for role, count in dashboard["personnel_on_site"].items():
+            print(f"  {role}: {count}")
+    else:
+        print("  none")
+    print(f"Active alerts: {dashboard['active_alerts']}")
+    summary = dashboard["vault_summary"]
+    print(f"Vault items: {summary.total_items}")
+    print(f"Vault value in place: {summary.total_value_in_vault}")
+    print(f"Vault value checked out: {summary.total_value_checked_out}")
+    print("Recent events:")
+    if dashboard["recent_events"]:
+        for line in dashboard["recent_events"]:
+            print(f"  {line}")
+    else:
+        print("  none")
