@@ -212,3 +212,28 @@ def _handle_vault(args: argparse.Namespace, facility: Facility) -> int:
     item = facility.vault_check_in(args.item_id, args.requester, notes=args.notes)
     print(f"Checked in {item.item_id}.")
     return 0
+
+def _handle_invites(args: argparse.Namespace, facility: Facility) -> int:
+    if args.invite_action == "generate":
+        invite = facility.generate_invite(
+            creator_ref=args.creator_ref,
+            required_access_level=args.required_access_level,
+            max_use_count=args.uses,
+            expires_at=datetime.now() + timedelta(hours=args.hours),
+        )
+        print(
+            f"Generated invite {invite.code_string} "
+            f"(masked: {invite.masked_code}, uses: {invite.remaining_uses})."
+        )
+        return 0
+    if args.invite_action == "validate":
+        result = facility.validate_invite(args.code)
+        state = result.state.value if result.state else "UNKNOWN"
+        print(
+            f"{result.masked_code}: usable={result.usable} "
+            f"state={state} reason={result.reason or 'ok'}"
+        )
+        return 0
+    entry = facility.use_invite(args.code)
+    print(entry.detail)
+    return 0
