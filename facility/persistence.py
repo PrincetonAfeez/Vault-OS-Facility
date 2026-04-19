@@ -310,3 +310,14 @@ def events_stack_from_record(record: dict[str, Any]) -> tuple[EventBus, AlertMan
     event_bus.restore_history_snapshot(restored_events)
     event_log.replace_captured_events(list(restored_events), [format_event(event) for event in restored_events])
     return event_bus, alert_manager, event_log
+
+
+def event_record(event: Event) -> dict[str, str]:
+    return {
+        "source": event.source,
+        "event_type": event.event_type,
+        "severity": event.severity.name,
+        "message": event.message,
+        "timestamp": event.timestamp.isoformat(),
+        "event_id": event.event_id,
+    }
