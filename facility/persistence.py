@@ -455,3 +455,61 @@ def person_from_record(record: dict[str, Any]) -> Person:
         visit_purpose=record["visit_purpose"],
         expected_duration_minutes=record["expected_duration_minutes"],
     )
+
+def device_record(device: Device) -> dict[str, Any]:
+    rec: dict[str, Any] = {
+        "type": device.__class__.__name__,
+        "device_id": device.device_id,
+        "name": device.name,
+        "powered_on": device.powered_on,
+        "activity_log": [activity_record(item) for item in device.activity_log],
+    }
+    if isinstance(device, Camera):
+        rec.update(
+            {
+                "recording": device.recording,
+                "recording_started_at": (
+                    device._recording_started_at.isoformat() if device._recording_started_at else None
+                ),
+                "night_mode": device.night_mode,
+                "motion_detection": device.motion_detection,
+                "recording_history": [recording_session_record(item) for item in device.recording_history],
+            }
+        )
+    elif isinstance(device, Lock):
+        rec.update(
+            {
+                "keycode": device._keycode,
+                "locked": device.locked,
+                "failed_attempts": device.failed_attempts,
+                "lockout_threshold": device._lockout_threshold,
+                "lockout_duration_seconds": device._lockout_duration_seconds,
+                "auto_lock_seconds": device.auto_lock_seconds,
+                "locked_out_until": (
+                    device._locked_out_until.isoformat() if device._locked_out_until else None
+                ),
+                "last_unlocked_at": (
+                    device._last_unlocked_at.isoformat() if device._last_unlocked_at else None
+                ),
+            }
+        )
+    elif isinstance(device, AlarmSystem):
+        rec.update(
+            {
+                "reset_code": device._reset_code,
+                "arm_mode": device.arm_mode,
+                "triggered": device.triggered,
+                "silent_alarm": device.silent_alarm,
+            }
+        )
+    elif isinstance(device, Thermostat):
+        rec.update(
+            {
+                "target_temperature": device.target_temperature,
+                "current_temperature": device.current_temperature,
+                "alert_threshold": device.alert_threshold,
+                "mode": device.mode,
+            }
+        )
+    return rec
+
