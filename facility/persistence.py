@@ -332,3 +332,11 @@ def event_from_record(record: dict[str, str]) -> Event:
         event_id=record["event_id"],
     )
 
+def alert_record(alert: Alert) -> dict[str, Any]:
+    return {
+        "event": event_record(alert.event),
+        "state": alert.state.value,
+        "acknowledged_by": alert.acknowledged_by,
+        "acknowledged_at": alert.acknowledged_at.isoformat() if alert.acknowledged_at else None,
+        "resolution_notes": alert.resolution_notes,
+    }
