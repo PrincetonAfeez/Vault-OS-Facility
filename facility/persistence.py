@@ -53,3 +53,16 @@ from .core import Facility, FacilityStateError
 # Increment when the JSON snapshot shape changes incompatibly; loaders reject higher versions.
 FACILITY_RECORD_VERSION = 1
 
+def ensure_facility_record_version_supported(record: dict[str, Any]) -> None:
+    raw = record.get("schema_version", 1)
+    try:
+        version = int(raw)
+    except (TypeError, ValueError) as exc:
+        raise FacilityStateError(f"Invalid facility record schema_version: {raw!r}.") from exc
+    if version < 1:
+        raise FacilityStateError(f"Invalid facility record schema_version: {version}.")
+    if version > FACILITY_RECORD_VERSION:
+        raise FacilityStateError(
+            f"Facility state schema_version {version} is not supported by this build "
+            f"(maximum {FACILITY_RECORD_VERSION}). Upgrade vaultos-facility or re-export state."
+        )
