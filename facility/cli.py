@@ -203,3 +203,12 @@ def _handle_personnel(args: argparse.Namespace, facility: Facility) -> int:
     for item in result["checked_out_items"]:
         print(f"Held item: {item.item_id} {item.name}")
     return 0
+
+def _handle_vault(args: argparse.Namespace, facility: Facility) -> int:
+    if args.vault_action == "checkout":
+        item = facility.vault_checkout(args.item_id, args.requester, notes=args.notes)
+        print(f"Checked out {item.item_id} to {item.current_holder}.")
+        return 0
+    item = facility.vault_check_in(args.item_id, args.requester, notes=args.notes)
+    print(f"Checked in {item.item_id}.")
+    return 0
