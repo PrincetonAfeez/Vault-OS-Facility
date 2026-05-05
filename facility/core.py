@@ -1,3 +1,5 @@
+"""facility.core - Vault OS Facility core module"""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -25,14 +27,12 @@ class FacilityError(Exception):
 class FacilityStateError(FacilityError):
     """Raised when cross-system facility state blocks an operation."""
 
-from .operations import (
-    FacilityAccessMixin,
-    FacilityDevicesMixin,
-    FacilityEventsMixin,
-    FacilityInvitesMixin,
-    FacilityPersonnelMixin,
-    FacilityVaultMixin,
-)
+from .operations.access import FacilityAccessMixin
+from .operations.devices import FacilityDevicesMixin
+from .operations.events import FacilityEventsMixin
+from .operations.invites import FacilityInvitesMixin
+from .operations.personnel import FacilityPersonnelMixin
+from .operations.vault import FacilityVaultMixin
 
 
 class Facility(
